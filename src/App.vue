@@ -12,6 +12,43 @@ export default{
       operation(e){
         //클릭한 버튼 값 가져오기
         const n = e.currentTarget.value;
+        if(['+','-','*','/','='].includes(n)){
+          this.cur = Number(this.cur);
+          if(this.operator !== null){
+            //사칙연산 기호면 연산 수행
+            switch(this.operator){
+              case '+':
+                this.prev = this.prev + this.cur;
+                console.log("prev",this.prev)
+                break;
+              case '-':
+                this.prev = this.prev - this.cur;
+                break;
+              case '*':
+                this.prev = this.prev * this.cur;
+                break;
+              case '/':
+                this.prev = this.prev / this.cur;
+                break;
+            }
+            //등호면 연산 결과 노출
+            if( n === '='){
+              this.output = this.prev;
+              this.operator = null;
+              this.cur = this.prev;
+            }else {
+              this.output = null;
+              this.operator = n;
+              this.cur = null;
+            }
+          }else{
+            this.output = null;
+            this.operator = n;
+            this.prev = this.cur;
+            this.cur = null;
+          }
+          return;
+        } //연산로직
         this.cur = this.cur === null? n: (this.cur += n);
         this.output = this.cur
       }
