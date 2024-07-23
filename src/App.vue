@@ -12,6 +12,14 @@ export default{
       operation(e){
         //클릭한 버튼 값 가져오기
         const n = e.currentTarget.value;
+        //초기화 로직
+        if(n === 'C'){
+          this.output = null;
+          this.prev = null;
+          this.cur = null;
+          this.operator = null;
+          return;
+        }
         if(['+','-','*','/','='].includes(n)){
           //저장된 숫자가 없는데 연산 기호를 클릭한 경우 
           if(!this.cur && !this.prev){
