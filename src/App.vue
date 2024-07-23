@@ -13,6 +13,20 @@ export default{
         //클릭한 버튼 값 가져오기
         const n = e.currentTarget.value;
         if(['+','-','*','/','='].includes(n)){
+          //저장된 숫자가 없는데 연산 기호를 클릭한 경우 
+          if(!this.cur && !this.prev){
+            alert('숫자를 먼저 입력하세요. ');
+            return;
+          }
+          //사칙연산 기호를 연달아 클릭한 경우
+          if(this.operator !== '' && !this.cur){
+            alert('사칙연산 기호를 연달아 누를 수 없습니다. ');
+            return;
+          }
+          //등호를 클릭해 결과를 노출한 후 다시 등호를 클릭한 경우
+          if(n === 'n' && this.prev === this.cur){
+            return;
+          }
           this.cur = Number(this.cur);
           if(this.operator !== null){
             //사칙연산 기호면 연산 수행
