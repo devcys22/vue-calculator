@@ -6,21 +6,23 @@ export default{
       prev: null, //이전에 입력된 값 또는 연산 결과
       cur: null, //현재 입력된 값
       operator: null, //연산자
+      operatorActions: {
+        '+': (a,b) => a + b,
+        '-': (a,b) => a - b,
+        '*': (a,b) => a * b,
+        '/': (a,b) => a / b,
+      }
     }
   },
     methods: {
-      operation(e){
-        //클릭한 버튼 값 가져오기
-        const n = e.currentTarget.value;
-        //초기화 로직
-        if(n === 'C'){
+      clear(){ //초기화 로직을 초기화 함수로 분리
           this.output = null;
           this.prev = null;
           this.cur = null;
           this.operator = null;
-          return;
-        }
-        if(['+','-','*','/','='].includes(n)){
+      },
+      calculate(n){ //연산로직 함수로 분리
+        
           //저장된 숫자가 없는데 연산 기호를 클릭한 경우 
           if(!this.cur && !this.prev){
             alert('숫자를 먼저 입력하세요. ');
@@ -36,23 +38,10 @@ export default{
             return;
           }
           this.cur = Number(this.cur);
-          if(this.operator !== null){
-            //사칙연산 기호면 연산 수행
-            switch(this.operator){
-              case '+':
-                this.prev = this.prev + this.cur;
-                console.log("prev",this.prev)
-                break;
-              case '-':
-                this.prev = this.prev - this.cur;
-                break;
-              case '*':
-                this.prev = this.prev * this.cur;
-                break;
-              case '/':
-                this.prev = this.prev / this.cur;
-                break;
-            }
+          if(this.operator !== null){ //사칙연산 기호면 연산 수행
+            // 앞에서 operatorActions를 객체로 정의
+            // 객체의 각 속성은 함수를 값으로 가지는 메서드라서 다음처럼 작성 가능
+            this.prev = this.operatorActions[this.operator](this.prev, this.cur);
             //등호면 연산 결과 노출
             if( n === '='){
               this.output = this.prev;
@@ -70,13 +59,26 @@ export default{
             this.cur = null;
           }
           return;
-        } //연산로직
+      },
+      userInput(n){ //사용자가 입력한 숫자를 저장하는 로직을 함수로 분리
         this.cur = this.cur === null? n: (this.cur += n);
         this.output = this.cur
-      }
+      },
+      operation(e){
+        //클릭한 버튼 값 가져오기
+        const n = e.currentTarget.value;
+         //초기화 로직
+        if(n === 'C'){
+          this.clear(); 
+          return;
+        }else if(['+','-','*','/','='].includes(n)){
+          this.calculate(n);
+        }else {
+          this.userInput(n);
+        }
     }
+  }
 }
-
 </script>
 <template>
   <div class="calculator">
