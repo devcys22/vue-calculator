@@ -9,8 +9,11 @@ export default{
     }
   },
     methods: {
-      operation(){
-        console.log("click")
+      operation(e){
+        //클릭한 버튼 값 가져오기
+        const n = e.currentTarget.value;
+        this.cur = this.cur === null? n: (this.cur += n);
+        this.output = this.cur
       }
     }
 }
